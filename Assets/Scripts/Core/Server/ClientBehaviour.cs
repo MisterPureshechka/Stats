@@ -24,7 +24,7 @@ namespace Core.Server
         private int _roomIndex;
         private int _playerIndex;
 
-        private void Start() 
+        private void OnEnable() 
         {
             _roomIndex = -1;
             _playerIndex = -1;
@@ -37,7 +37,7 @@ namespace Core.Server
             _logTextArea.text += "\nCLIENT: " + endpoint.Address;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             if (_connection.IsCreated) 
             {
@@ -66,8 +66,10 @@ namespace Core.Server
                     var value = new NativeArray<byte>(rawValue, Allocator.Persistent);
                     stream.ReadBytes(value);
 
-                    _roomIndex = Converter.FromByteArray<int>(value.Take(4).ToArray());
-                    _playerIndex = Converter.FromByteArray<int>(value.Skip(4).Take(4).ToArray());
+                    if (_roomIndex < 0)
+                        _roomIndex = Converter.FromByteArray<int>(value.Take(4).ToArray());
+                    if (_playerIndex < 0)
+                        _playerIndex = Converter.FromByteArray<int>(value.Skip(4).Take(4).ToArray());
 
                     _logTextArea.text += "\nCLIENT: " + "Got the room index " + _roomIndex;
                     _logTextArea.text += "\nCLIENT: " + "Got the player index " + _playerIndex;
