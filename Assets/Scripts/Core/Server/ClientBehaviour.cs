@@ -21,7 +21,11 @@ namespace Core.Server
         private NetworkDriver _driver;
         private NetworkConnection _connection;
 
+        [SerializeField]
+        [ShowOnly]
         private int _roomIndex;
+        [SerializeField]
+        [ShowOnly]
         private int _playerIndex;
 
         private void OnEnable() 
