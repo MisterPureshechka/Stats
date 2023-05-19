@@ -154,6 +154,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _logTextArea: {fileID: 1328866029}
   _ip: 127.0.0.1
+  _port: 9000
+  _roomIndex: 0
+  _playerIndex: 0
 --- !u!4 &9712479
 Transform:
   m_ObjectHideFlags: 0
@@ -411,6 +414,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _logTextArea: {fileID: 1328866029}
   _ip: 127.0.0.1
+  _port: 9000
+  _maxRooms: 250
+  _maxPlayersInRoom: 15
 --- !u!1 &894258219
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,6 +516,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _logTextArea: {fileID: 1328866029}
   _ip: 127.0.0.1
+  _port: 9000
+  _roomIndex: 0
+  _playerIndex: 0
 --- !u!4 &981317010
 Transform:
   m_ObjectHideFlags: 0
@@ -556,6 +565,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _logTextArea: {fileID: 1328866029}
   _ip: 127.0.0.1
+  _port: 9000
+  _roomIndex: 0
+  _playerIndex: 0
 --- !u!4 &1267349836
 Transform:
   m_ObjectHideFlags: 0
@@ -682,6 +694,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _logTextArea: {fileID: 1328866029}
   _ip: 127.0.0.1
+  _port: 9000
+  _roomIndex: 0
+  _playerIndex: 0
 --- !u!4 &1417805761
 Transform:
   m_ObjectHideFlags: 0
@@ -728,6 +743,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _logTextArea: {fileID: 1328866029}
   _ip: 127.0.0.1
+  _port: 9000
+  _roomIndex: 0
+  _playerIndex: 0
 --- !u!4 &1812663801
 Transform:
   m_ObjectHideFlags: 0
