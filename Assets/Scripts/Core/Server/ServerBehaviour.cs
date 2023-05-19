@@ -15,13 +15,15 @@ namespace Core.Server
         private Text _logTextArea;
         [SerializeField]
         private string _ip = "127.0.0.1";
+        [SerializeField]
+        private ushort _port = 9000;
+        [SerializeField]
+        private int _maxRooms = 250;
+        [SerializeField]
+        private int _maxPlayersInRoom = 15;
 
         private NetworkDriver _driver;
         private NativeList<NetworkConnection> _connections;
-
-        private const ushort _port = 9000;
-        private const int _maxRooms = 250;
-        private const int _maxPlayersInRoom = 15;
 
         private byte[][][] _rooms;
 
@@ -56,7 +58,6 @@ namespace Core.Server
         {
             _driver.ScheduleUpdate().Complete();
 
-            // CleanUpConnections
             for (int i = 0; i < _connections.Length; i++)
             {
                 if (_connections[i].IsCreated)
@@ -66,7 +67,6 @@ namespace Core.Server
                 --i;
             }
 
-            // AcceptNewConnections
             NetworkConnection c;
             while ((c = _driver.Accept()) != default)
             {
@@ -74,14 +74,13 @@ namespace Core.Server
                 _logTextArea.text += "\nSERVER: " + "Accepted a connection";
             }
 
-            DataStreamReader stream;
             for (int i = 0; i < _connections.Length; i++)
             {
                 if (!_connections[i].IsCreated)
                     continue;
 
                 NetworkEvent.Type cmd;
-                while ((cmd = _driver.PopEventForConnection(_connections[i], out stream)) != NetworkEvent.Type.Empty)
+                while ((cmd = _driver.PopEventForConnection(_connections[i], out var stream)) != NetworkEvent.Type.Empty)
                 {
                     if (cmd == NetworkEvent.Type.Data)
                     {
@@ -95,7 +94,7 @@ namespace Core.Server
 
                         var rawPlayerIndex = getData.Skip(4).Take(4).ToArray();
                         var playerIndex = Converter.FromByteArray<int>(rawPlayerIndex);
-                        
+
                         if (roomIndex < 0)
                         {
                             for (var roomI = 0; roomI < _rooms.Length; roomI++)
