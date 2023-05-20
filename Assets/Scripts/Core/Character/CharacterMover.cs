@@ -83,12 +83,21 @@ namespace Core.Character
         private void OnAnimatorIK(int layerIndex)
         {
             var deltaTime = Time.deltaTime;
-            Anim.SetFloat(_inputMoveParams.MoveSpeed, _stats.MoveSpeed);
 
+            Anim.applyRootMotion = Anim.IsTag(_inputMoveParams.MoveTag);
+            NavAgent.isStopped = Anim.applyRootMotion;
+            NavAgent.speed = _stats.MoveSpeed;
+            NavAgent.velocity = _moveInput * _stats.MoveSpeed * (NavAgent.isStopped ? 0f : 1f);
+
+            Anim.SetFloat(_inputMoveParams.MoveSpeed, _stats.MoveSpeed);
             Anim.SetFloat(_inputMoveParams.State, _state, 1f / _stats.AnimSens, deltaTime);
 
-            Anim.SetFloat(_inputMoveParams.Vert, _moveInput.z, 1f / _stats.AnimSens, deltaTime);
-            Anim.SetFloat(_inputMoveParams.Hor, _moveInput.x, 1f / _stats.AnimSens, deltaTime);
+            var moveInput = transform.InverseTransformDirection(NavAgent.velocity);
+            Anim.SetFloat(_inputMoveParams.Vert, moveInput.z, 1f / _stats.AnimSens, deltaTime);
+            Anim.SetFloat(_inputMoveParams.Hor, moveInput.x, 1f / _stats.AnimSens, deltaTime);
+
+            //Anim.SetFloat(_inputMoveParams.Vert, _moveInput.z, 1f / _stats.AnimSens, deltaTime);
+            //Anim.SetFloat(_inputMoveParams.Hor, _moveInput.x, 1f / _stats.AnimSens, deltaTime);
 
             Anim.SetLookAtWeight(1f, 0.7f, 0.9f, 1f, 1f);
             Anim.SetLookAtPosition(_targetPos);

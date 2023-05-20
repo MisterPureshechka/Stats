@@ -41210,11 +41210,11 @@ Transform:
   - {fileID: 7885019567689063867}
   - {fileID: 7884759453708414847}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 156.262, z: 0}
 --- !u!95 &7795265104432074099
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -41231,7 +41231,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &7795265104432074096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41246,6 +41247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputMoveParams:
     _anim: {fileID: 9100000, guid: 150e8694deafb43c2af3fd222f780195, type: 2}
+    _moveTag: Move
     _vert: Vert
     _hor: Hor
     _state: State
@@ -41259,7 +41261,7 @@ MonoBehaviour:
     _maxHealth: 100
     _animSens: 7
     _rotationLuft: 60
-    _moveSpeed: 1
+    _moveSpeed: 4
   _aimer:
     _chestAimingPoint: {fileID: 8598275964495628301}
     _handAimingPoint: {fileID: 8598275964687825618}
@@ -41342,8 +41344,17 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7888658386377489375}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
+  serializedVersion: 2
   m_Radius: 0.3
   m_Height: 1.8
   m_Direction: 1

@@ -1,9 +1,11 @@
 using System;
-using UnityEngine;
 using System.Linq;
+
+using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.Animations;
 #endif
 
 namespace Utils
@@ -11,6 +13,10 @@ namespace Utils
     [Serializable]
     public class AnimMoveParameter : AnimBaseParameter
     {
+        [SerializeField]
+        private string _moveTag;
+        public string MoveTag => _moveTag;
+
         [SerializeField]
         private string _vert;
         public int Vert => Animator.StringToHash(_vert);
@@ -43,6 +49,14 @@ namespace Utils
             {
                 var names = parameters.Select(p => p.name).ToArray();
 
+                var moveTagPropName = nameof(_moveTag);
+                var moveTagProperty = property.FindPropertyRelative(moveTagPropName);
+
+                var animProperty = property.FindPropertyRelative(nameof(_anim));
+                EditorGUI.PropertyField(GetPosition(), animProperty);
+                var targetAnim = animProperty.objectReferenceValue as AnimatorController;
+                moveTagProperty.stringValue = targetAnim.DrawValues(moveTagProperty.stringValue, GetPosition(), moveTagPropName);
+
                 UpdateParameter(nameof(_vert), names);
                 UpdateParameter(nameof(_hor), names);
                 UpdateParameter(nameof(_state), names);
@@ -64,9 +78,9 @@ namespace Utils
                     }
                     var parameterIndex = EditorGUI.Popup(GetPosition(), parameterName, currentIndex, parametersNames);
                     parameterProperty.stringValue = parametersNames[parameterIndex];
-
-                    Rect GetPosition() => position.GetPosition(ref _propertyHeight, 1);
                 }
+
+                Rect GetPosition() => position.GetPosition(ref _propertyHeight, 1);
             }
         }
 #endif

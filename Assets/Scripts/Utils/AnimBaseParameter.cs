@@ -13,7 +13,7 @@ namespace Utils
     {
 #if UNITY_EDITOR
         [SerializeField]
-        private AnimatorController _anim;
+        protected AnimatorController _anim;
 
         [CustomPropertyDrawer(typeof(AnimBaseParameter))]
         protected abstract class AnimBaseParameterDrawer : PropertyDrawer
