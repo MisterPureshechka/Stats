@@ -145,16 +145,17 @@ namespace Core.Character.InputSpace
             var vertInput = Input.GetAxis(_moveVertInput);
             var horInput = Input.GetAxis(_moveHorInput);
 
-            //var angle = _bodyTrans.eulerAngles.y * Mathf.Deg2Rad;
-            //var cosAngle = Mathf.Cos(angle);
-            //var sinAngle = Mathf.Sin(angle);
-            //var hor = cosAngle * horInput - sinAngle * vertInput;
-            //var vert = cosAngle * vertInput + sinAngle * horInput;
-            //_moveInput.x = hor;
-            //_moveInput.z = vert;
+            var angle = _bodyTrans.eulerAngles.y * Mathf.Deg2Rad;
+            var cosAngle = Mathf.Cos(angle);
+            var sinAngle = Mathf.Sin(angle);
+            var hor = cosAngle * horInput - sinAngle * vertInput;
+            var vert = cosAngle * vertInput + sinAngle * horInput;
+            _moveInput.x = hor;
+            _moveInput.z = vert;
 
-            _moveInput.x = horInput;
-            _moveInput.z = vertInput;
+            //_moveInput.x = horInput;
+            //_moveInput.z = vertInput;
+
             _moveInput.y = 0;
 
             var minDistance = Mathf.Infinity;

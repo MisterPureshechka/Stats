@@ -13,7 +13,8 @@ namespace Core.Character
         public static List<CharacterMover> Movers => _movers;
 
         private const float _minFloat = 0.1f;
-
+        [SerializeField]
+        private LayerMask _floorLayer;
         [SerializeField]
         private AnimMoveParameter _inputMoveParams;
         [SerializeField]
@@ -49,6 +50,8 @@ namespace Core.Character
         {
             _stats.Init();
             UpdateLivingState();
+
+            _moveInput = transform.position;
         }
 
         private void OnEnable() => _movers.Add(this);
@@ -56,8 +59,8 @@ namespace Core.Character
 
         public void SetInputs(Vector3 moveInput, Vector3 targetPos, bool isSimpleRot)
         {
-            _moveInput = moveInput;
-            _targetPos = targetPos;
+            //_moveInput = moveInput;
+            //_targetPos = targetPos;
             _isSimpleRot = isSimpleRot;
         }
 
@@ -84,10 +87,21 @@ namespace Core.Character
         {
             var deltaTime = Time.deltaTime;
 
+            var isInput = Input.GetMouseButtonUp(0);
+            var inputMouse = Camera.allCameras[0].ScreenPointToRay(Input.mousePosition);
+            if (isInput && Physics.Raycast(inputMouse, out var rayHit, float.MaxValue, _floorLayer, QueryTriggerInteraction.Ignore))
+            {
+                if (NavMesh.SamplePosition(rayHit.point, out var navHit, float.MaxValue, -1))
+                {
+                    _moveInput = navHit.position;
+                    _targetPos = navHit.position;
+                }
+            }
+
             Anim.applyRootMotion = Anim.IsTag(_inputMoveParams.MoveTag);
             NavAgent.isStopped = Anim.applyRootMotion;
             NavAgent.speed = _stats.MoveSpeed;
-            NavAgent.velocity = _moveInput * _stats.MoveSpeed * (NavAgent.isStopped ? 0f : 1f);
+            NavAgent.destination = _moveInput;
 
             Anim.SetFloat(_inputMoveParams.MoveSpeed, _stats.MoveSpeed);
             Anim.SetFloat(_inputMoveParams.State, _state, 1f / _stats.AnimSens, deltaTime);
@@ -95,9 +109,6 @@ namespace Core.Character
             var moveInput = transform.InverseTransformDirection(NavAgent.velocity);
             Anim.SetFloat(_inputMoveParams.Vert, moveInput.z, 1f / _stats.AnimSens, deltaTime);
             Anim.SetFloat(_inputMoveParams.Hor, moveInput.x, 1f / _stats.AnimSens, deltaTime);
-
-            //Anim.SetFloat(_inputMoveParams.Vert, _moveInput.z, 1f / _stats.AnimSens, deltaTime);
-            //Anim.SetFloat(_inputMoveParams.Hor, _moveInput.x, 1f / _stats.AnimSens, deltaTime);
 
             Anim.SetLookAtWeight(1f, 0.7f, 0.9f, 1f, 1f);
             Anim.SetLookAtPosition(_targetPos);
