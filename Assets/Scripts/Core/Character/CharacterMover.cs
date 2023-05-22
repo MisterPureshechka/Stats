@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 using Utils;
-using Core.Server;
 
 using UnityEngine;
 using UnityEngine.AI;
@@ -18,6 +15,7 @@ namespace Core.Character
         public static List<CharacterMover> Movers => _movers;
 
         private const float _minFloat = 0.1f;
+
         [SerializeField]
         private AnimMoveParameter _inputMoveParams;
         [SerializeField]
@@ -43,6 +41,7 @@ namespace Core.Character
         public Transform WeaponAimingPoint => _aimer.WeaponAimingPoint;
 
         private Vector3 _targetPos;
+        public Vector3 TargetPos => _targetPos;
 
         private Vector3 _moveInput;
         private float _state;
@@ -55,59 +54,6 @@ namespace Core.Character
             UpdateLivingState();
 
             _moveInput = transform.position;
-
-            ClientBehaviour.OnDataGetted += GetData;
-            StartCoroutine(SendData());
-        }
-
-        private IEnumerator SendData()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(0.1f);
-
-                var data = Converter.ToByteArray(transform.position.x)
-                    .Concat(Converter.ToByteArray(transform.position.y))
-                    .Concat(Converter.ToByteArray(transform.position.z))
-                    .Concat(Converter.ToByteArray(transform.eulerAngles.y));
-
-                ClientBehaviour.Send(data.ToArray());
-            }
-        }
-
-        private Dictionary<int, GameObject> _players = new();
-
-        private void GetData(byte[] data)
-        {
-            var kegleIndex = 4;
-            while (kegleIndex < data.Length)
-            {
-                var rawData = data.Skip(kegleIndex).Take(4).ToArray();
-                var playerIndex = Converter.FromByteArray<int>(rawData);
-                kegleIndex += 4;
-
-                rawData = data.Skip(kegleIndex).Take(4).ToArray();
-                var playerPosX = Converter.FromByteArray<float>(rawData);
-                kegleIndex += 4;
-
-                rawData = data.Skip(kegleIndex).Take(4).ToArray();
-                var playerPosY = Converter.FromByteArray<float>(rawData);
-                kegleIndex += 4;
-
-                rawData = data.Skip(kegleIndex).Take(4).ToArray();
-                var playerPosZ = Converter.FromByteArray<float>(rawData);
-                kegleIndex += 4;
-
-                rawData = data.Skip(kegleIndex).Take(4).ToArray();
-                var playerRotY = Converter.FromByteArray<float>(rawData);
-                kegleIndex += 4;
-
-                if (!_players.ContainsKey(playerIndex))
-                    _players[playerIndex] = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-
-                _players[playerIndex].transform.position = new Vector3(playerPosX, playerPosY, playerPosZ);
-                _players[playerIndex].transform.eulerAngles = new Vector3(0f, playerRotY, 0f);
-            }
         }
 
         private void OnEnable() => _movers.Add(this);
@@ -118,6 +64,8 @@ namespace Core.Character
             _moveInput = moveInput;
             _targetPos = targetPos;
             _isSimpleRot = isSimpleRot;
+
+            Debug.DrawLine(_targetPos, _targetPos + Vector3.up);
         }
 
         public void SetState(float state) => _state = state;

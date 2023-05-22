@@ -30,6 +30,7 @@ namespace Core.Character.InputSpace
             var cam = Camera.allCameras[0];
             var camTrans = cam.transform;
 
+            _topDownInput.Init(transform);
             _topDownCamera.Init(transform, camTrans);
         }
 

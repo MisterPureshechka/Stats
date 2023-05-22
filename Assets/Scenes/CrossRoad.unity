@@ -11201,6 +11201,54 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 957088777}
   m_Mesh: {fileID: 4300000, guid: c38ec2d41e467944386e590fc627b843, type: 3}
+--- !u!1 &975229393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 975229395}
+  - component: {fileID: 975229394}
+  m_Layer: 0
+  m_Name: MainServer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &975229394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 975229393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ded6760924954249919d52d23836059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ip: 127.0.0.1
+  _port: 9000
+  _maxRooms: 250
+  _maxPlayersInRoom: 15
+--- !u!4 &975229395
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 975229393}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 63.840195, y: -17.244986, z: 72.49933}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &985505512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29138,6 +29186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62a59184ebd6224428dde3464fb12696, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerPrefab: {fileID: 7888658386377489375, guid: ab5bced39d2706c4e986123ef1658ca3, type: 3}
+  _sendRate: 10
   _ip: 127.0.0.1
   _port: 9000
   _roomIndex: 0
@@ -29150,7 +29200,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137224443}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 63.840195, y: -17.244986, z: 72.49933}
+  m_LocalPosition: {x: 49.6, y: 1.29, z: 50.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -111872,10 +111922,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7795265104432074098, guid: ab5bced39d2706c4e986123ef1658ca3, type: 3}
-      propertyPath: _topDownInput._pointMarker
-      value: 
-      objectReference: {fileID: 1698068915230344, guid: 05f7c156786bd024e8da3bb1a4b8aa09, type: 3}
     - target: {fileID: 7884840694946980627, guid: ab5bced39d2706c4e986123ef1658ca3, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -111923,6 +111969,10 @@ PrefabInstance:
     - target: {fileID: 7888658386377489375, guid: ab5bced39d2706c4e986123ef1658ca3, type: 3}
       propertyPath: m_Name
       value: ModularCharacters
+      objectReference: {fileID: 0}
+    - target: {fileID: 7888658386377489375, guid: ab5bced39d2706c4e986123ef1658ca3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

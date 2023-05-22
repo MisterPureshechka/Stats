@@ -41298,6 +41298,7 @@ MonoBehaviour:
     _floorLayer:
       serializedVersion: 2
       m_Bits: 256
+    _pointMarker: {fileID: 1698068915230344, guid: 05f7c156786bd024e8da3bb1a4b8aa09, type: 3}
   _attack:
     _attackInput: Fire1
   _topDownCamera:
@@ -41325,7 +41326,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

@@ -269,8 +269,15 @@ namespace Core.Character.InputSpace
         [SerializeField]
         private GameObject _pointMarker;
 
+        private Transform _bodyTrans;
+
         private Vector3 _moveInput;
         private Vector3 _targetPos;
+
+        public void Init(Transform bodyTrans)
+        {
+            _bodyTrans = bodyTrans;
+        }
 
         public void SetInputs(out Vector3 moveInput, out Vector3 targetPos)
         {
@@ -287,9 +294,13 @@ namespace Core.Character.InputSpace
 
             if (!NavMesh.SamplePosition(rayHit.point, out var navHit, float.MaxValue, -1))
                 return;
-
             _moveInput = navHit.position;
+
             _targetPos = navHit.position + Vector3.up * _heightTargetOffset;
+            var heading = _targetPos - _bodyTrans.position;
+            var distance = heading.magnitude;
+            var direction = heading / distance;
+            _targetPos += direction;
 
             moveInput = _moveInput;
             targetPos = _targetPos;
