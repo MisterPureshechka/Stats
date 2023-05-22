@@ -4,15 +4,17 @@ using Unity.Collections;
 using Unity.Networking.Transport;
 
 using System.Linq;
-using UnityEngine.UI;
 using Utils;
+using System;
 
 namespace Core.Server
 {
     public class ClientBehaviour : MonoBehaviour
     {
-        [SerializeField]
-        private Text _logTextArea;
+        public static Action<byte[]> OnDataGetted;
+
+        private static ClientBehaviour _instance;
+
         [SerializeField]
         private string _ip = "127.0.0.1";
         [SerializeField]
@@ -24,12 +26,31 @@ namespace Core.Server
         [SerializeField]
         [ShowOnly]
         private int _roomIndex;
+        public int RoomIndex => _roomIndex;
+
         [SerializeField]
         [ShowOnly]
         private int _playerIndex;
+        public int PlayerIndex => _playerIndex;
+
+        public static void Send(params byte[] data)
+        {
+            if (_instance != null)
+                _instance.SendData(data);
+        }
+
+        public static int GetPlayerIndex()
+        {
+            if (_instance == null)
+                return -1;
+
+            return _instance.PlayerIndex;
+        }
 
         private void OnEnable() 
         {
+            _instance = this;
+
             _roomIndex = -1;
             _playerIndex = -1;
 
@@ -38,11 +59,12 @@ namespace Core.Server
 
             var endpoint = NetworkEndpoint.Parse(_ip, _port);
             _connection = _driver.Connect(endpoint);
-            _logTextArea.text += "\nCLIENT: " + endpoint.Address;
         }
 
         private void OnDisable()
         {
+            _instance = null;
+
             if (_connection.IsCreated) 
             {
                 _connection.Disconnect(_driver);
@@ -62,7 +84,7 @@ namespace Core.Server
             {
                 if (cmd == NetworkEvent.Type.Connect)
                 {
-                    _logTextArea.text += "\nCLIENT: " + "Client got connected to server";
+                    
                 }
                 else if (cmd == NetworkEvent.Type.Data)
                 {
@@ -75,12 +97,10 @@ namespace Core.Server
                     if (_playerIndex < 0)
                         _playerIndex = Converter.FromByteArray<int>(value.Skip(4).Take(4).ToArray());
 
-                    _logTextArea.text += "\nCLIENT: " + "Got the room index " + _roomIndex;
-                    _logTextArea.text += "\nCLIENT: " + "Got the player index " + _playerIndex;
+                    OnDataGetted.Invoke(value.ToArray());
                 }
                 else if (cmd == NetworkEvent.Type.Disconnect)
                 {
-                    _logTextArea.text += "\nCLIENT: " + "Client got disconnected from server";
                     _connection = default;
                 }
             }

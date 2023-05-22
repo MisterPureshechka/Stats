@@ -1,6 +1,9 @@
 ﻿using System;
-using UnityEngine;
+
 using Utils;
+
+using UnityEngine;
+using UnityEngine.AI;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -239,6 +242,80 @@ namespace Core.Character.InputSpace
                         break;
                     }
                 }
+
+                var boxPosition = position;
+                boxPosition.height = _propertyHeight;
+                EditorGUI.HelpBox(boxPosition, string.Empty, MessageType.None);
+
+                Rect GetPosition(int lines = 1) => position.GetPosition(ref _propertyHeight, lines);
+                SerializedProperty GetProperty(string path) => property.FindPropertyRelative(path);
+            }
+
+            public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => _propertyHeight;
+        }
+#endif
+    }
+
+    [Serializable]
+    public class TopDownInput
+    {
+        private const float _markerLifeTime = 5f;
+
+        [SerializeField]
+        [Range(0f, 5f)]
+        private float _heightTargetOffset = 1.5f;
+        [SerializeField]
+        private LayerMask _floorLayer;
+        [SerializeField]
+        private GameObject _pointMarker;
+
+        private Vector3 _moveInput;
+        private Vector3 _targetPos;
+
+        public void SetInputs(out Vector3 moveInput, out Vector3 targetPos)
+        {
+            moveInput = _moveInput;
+            targetPos = _targetPos;
+
+            var isInput = Input.GetMouseButtonUp(0);
+            if (!isInput)
+                return;
+
+            var inputMouse = Camera.allCameras[0].ScreenPointToRay(Input.mousePosition);
+            if (!Physics.Raycast(inputMouse, out var rayHit, float.MaxValue, _floorLayer, QueryTriggerInteraction.Ignore))
+                return;
+
+            if (!NavMesh.SamplePosition(rayHit.point, out var navHit, float.MaxValue, -1))
+                return;
+
+            _moveInput = navHit.position;
+            _targetPos = navHit.position + Vector3.up * _heightTargetOffset;
+
+            moveInput = _moveInput;
+            targetPos = _targetPos;
+
+            if (_pointMarker == null)
+                return;
+
+            var pointMarker = GameObject.Instantiate(_pointMarker, _moveInput, Quaternion.Euler(Vector3.up));
+            GameObject.Destroy(pointMarker, _markerLifeTime);
+        }
+
+#if UNITY_EDITOR
+        [CustomPropertyDrawer(typeof(TopDownInput))]
+        private class TopDownInputDrawer : PropertyDrawer
+        {
+            protected float _propertyHeight;
+
+            public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+            {
+                _propertyHeight = 0f;
+
+                GUI.Label(GetPosition(), label);
+
+                EditorGUI.PropertyField(GetPosition(), GetProperty(nameof(_heightTargetOffset)));
+                EditorGUI.PropertyField(GetPosition(), GetProperty(nameof(_floorLayer)));
+                EditorGUI.PropertyField(GetPosition(), GetProperty(nameof(_pointMarker)));
 
                 var boxPosition = position;
                 boxPosition.height = _propertyHeight;

@@ -5,10 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/CrossRoad.unity
     guid: 9136dab4be10eb445af16d397386e954
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Server.unity
     guid: 9dd2e75889110504c9e7c88e7c8f00c3
   m_configObjects: {}

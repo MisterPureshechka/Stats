@@ -41293,14 +41293,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca2377652b993ae40a6a1d08e11743c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _topDownMoving:
-    _moveVertInput: Vertical
-    _moveHorInput: Horizontal
-    _targetSpeed: 10
-    _targetDistance: 15
-    _findTargetsRadius: 10
+  _topDownInput:
     _heightTargetOffset: 1.5
-    _targetTags: []
+    _floorLayer:
+      serializedVersion: 2
+      m_Bits: 256
   _attack:
     _attackInput: Fire1
   _topDownCamera:

@@ -4,15 +4,12 @@ using Unity.Collections;
 using Unity.Networking.Transport;
 
 using System.Linq;
-using UnityEngine.UI;
 using Utils;
 
 namespace Core.Server
 {
     public class ServerBehaviour : MonoBehaviour
     {
-        [SerializeField]
-        private Text _logTextArea;
         [SerializeField]
         private string _ip = "127.0.0.1";
         [SerializeField]
@@ -37,11 +34,11 @@ namespace Core.Server
 
             var endpoint = NetworkEndpoint.Parse(_ip, _port);
             if (_driver.Bind(endpoint) != 0)
-                _logTextArea.text += "\nSERVER: " + "Failed to bind to port " + _port;
+                Debug.Log("SERVER: " + "Failed to bind to port " + _port);
             else
                 _driver.Listen();
 
-            _logTextArea.text += "\nSERVER: " + endpoint.Address;
+            Debug.Log("SERVER: " + endpoint.Address);
             _connections = new NativeList<NetworkConnection>(Allocator.Persistent);
         }
 
@@ -71,7 +68,7 @@ namespace Core.Server
             while ((c = _driver.Accept()) != default)
             {
                 _connections.Add(c);
-                _logTextArea.text += "\nSERVER: " + "Accepted a connection";
+                Debug.Log("SERVER: " + "Accepted a connection");
             }
 
             for (int i = 0; i < _connections.Length; i++)
@@ -84,7 +81,7 @@ namespace Core.Server
                 {
                     if (cmd == NetworkEvent.Type.Data)
                     {
-                        _logTextArea.text += "\nSERVER: " + "Received some data from client";
+                        Debug.Log("SERVER: " + "Received some data from client");
                         var rawGetData = new byte[stream.Length];
                         var getData = new NativeArray<byte>(rawGetData, Allocator.Persistent);
                         stream.ReadBytes(getData);
@@ -142,7 +139,7 @@ namespace Core.Server
                     }
                     else if (cmd == NetworkEvent.Type.Disconnect)
                     {
-                        _logTextArea.text += "\nSERVER: " + "Client disconnected from server";
+                        Debug.Log("SERVER: " + "Client disconnected from server");
                         _connections[i] = default;
                     }
                 }

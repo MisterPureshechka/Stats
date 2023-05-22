@@ -7,7 +7,7 @@ namespace Core.Character.InputSpace
     public class PlayerInput : MonoBehaviour
     {
         [SerializeField]
-        private TopDownMovingInput _topDownMoving;
+        private TopDownInput _topDownInput;
         [SerializeField]
         private AttackInput _attack;
         [SerializeField]
@@ -30,7 +30,6 @@ namespace Core.Character.InputSpace
             var cam = Camera.allCameras[0];
             var camTrans = cam.transform;
 
-            _topDownMoving.Init(transform);
             _topDownCamera.Init(transform, camTrans);
         }
 
@@ -38,7 +37,7 @@ namespace Core.Character.InputSpace
         {
             var deltaTime = Time.deltaTime;
 
-            _topDownMoving.SetInputs(deltaTime, out var moveInput, out var targetPos);
+            _topDownInput.SetInputs(out var moveInput, out var targetPos);
             _topDownCamera.PosChange(deltaTime);
 
             CharMover.SetInputs(moveInput, targetPos, _isSimpleRot);
